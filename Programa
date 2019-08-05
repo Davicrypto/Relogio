@@ -1,0 +1,71 @@
+SevSeg display7seg;
+ 
+int valor = 0;
+ 
+byte zero = 0x00; 
+unsigned long timer;
+void setup()
+{
+  Wire.begin();
+ int displayType = COMMON_ANODE; 
+     
+int digit1 = 10; 
+  int digit2 = 11; 
+  int digit3 = 12; 
+  int digit4 = 13;
+
+int segA = 2; //Pino segmento A  
+  int segB = 3; //Pino segmento B
+  int segC = 4; //Pino segmento C
+  int segD = 5; //Pino segmento D
+  int segE = 6; //Pino segmento E
+  int segF = 7; //Pino segmento F
+  int segG = 8; //Pino segmento G
+  int segDP= 9; //Pino segmento H
+
+int numberOfDigits = 4;
+  display7seg.Begin(displayType, numberOfDigits, digit1, digit2, digit3, digit4, segA, segB, segC, segD, segE, segF, segG, segDP);
+   
+display7seg.SetBrightness(50);
+  timer = millis();
+}
+ 
+void loop()
+{
+  char tempString[10]; 
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero);
+  Wire.endTransmission();
+  Wire.requestFrom(DS1307_ADDRESS, 7);
+  int segundos = ConverteparaDecimal(Wire.read());
+  int minutos = ConverteparaDecimal(Wire.read());
+  int horas = ConverteparaDecimal(Wire.read() & 0b111111); 
+  sprintf(tempString, "%02d%02d", horas, minutos);
+  display7seg.DisplayString(tempString, 3);
+}
+void SelecionaDataeHora
+{
+  byte segundos = 10;
+  byte minutos = 32; 
+  byte horas = 19; 
+  Wire.beginTransmission(DS1307_ADDRESS);
+  Wire.write(zero); 
+ 
+  Wire.write(ConverteParaBCD(segundos));
+  Wire.write(ConverteParaBCD(minutos));
+  Wire.write(ConverteParaBCD(horas));
+  Wire.write(zero);
+  Wire.endTransmission(); 
+}
+ 
+byte ConverteParaBCD(byte val)
+{ 
+  //Converte o número de decimal para BCD
+  return ( (val/10*16) + (val%10) );
+}
+ 
+byte ConverteparaDecimal(byte val)  
+{ 
+  //Converte de BCD para decimal
+  return ( (val/16*10) + (val%16) );
+}
