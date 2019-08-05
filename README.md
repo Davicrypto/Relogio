@@ -9,3 +9,6 @@ Um relógio digital capaz de medir o tempo. O principal objetivo do projeto é c
 (1x) Mostrar 7 segmentos
 
 Kit Cabos de Ligação Macho / Macho
+
+# Crédito 
+www.filipeflop.com
